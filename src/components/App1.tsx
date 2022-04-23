@@ -1,5 +1,5 @@
-import { useState, useCallback, ReactChild, ChangeEvent } from 'react';
-import { Names, Professions, Experience } from './index';
+import { useState, ReactChild, ChangeEvent } from 'react';
+import { Names1, Professions1, Experience1 } from './index';
 import { randomColor } from '../utilis';
 import '../App.css';
 
@@ -22,7 +22,7 @@ export function App1() {
     currentStep: 0
   });
 
-  const handleChangeNames = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeNames = (e: ChangeEvent<HTMLInputElement>) => {
     setFormState(prev => ({
       ...prev,
       fields: {
@@ -31,9 +31,9 @@ export function App1() {
       },
       currentState: 0
     }));
-  }, []);
+  };
 
-  const handleChangeProfessions = useCallback((profession: string) => {
+  const handleChangeProfessions = (profession: string) => {
     setFormState(prev => ({
       ...prev,
       fields: {
@@ -42,24 +42,21 @@ export function App1() {
       },
       currentState: 1
     }));
-  }, []);
+  };
 
-  const handleChangeExperience = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      setFormState(prev => ({
-        ...prev,
-        fields: {
-          ...prev.fields,
-          experience: {
-            ...prev.fields.experience,
-            [e.target.name]: e.target.value
-          }
-        },
-        currentState: 2
-      }));
-    },
-    []
-  );
+  const handleChangeExperience = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormState(prev => ({
+      ...prev,
+      fields: {
+        ...prev.fields,
+        experience: {
+          ...prev.fields.experience,
+          [e.target.name]: e.target.value
+        }
+      },
+      currentState: 2
+    }));
+  };
 
   const handleNext = () => {
     setFormState(prev => ({
@@ -84,24 +81,24 @@ export function App1() {
         <span className="json-text">{JSON.stringify(formState, null, 2)}</span>
       </div>
       <>
-        <Names value={formState.fields.names} />
-        <Professions value={formState.fields.professions} />
-        <Experience value={formState.fields.experience} />
+        <Names1 value={formState.fields.names} />
+        <Professions1 value={formState.fields.professions} />
+        <Experience1 value={formState.fields.experience} />
       </>
       <Stepper
         currentStep={formState.currentStep}
         handlePrev={handlePrev}
         handleNext={handleNext}
       >
-        <Names
+        <Names1
           handleChangeNames={handleChangeNames}
           value={formState.fields.names}
         />
-        <Professions
+        <Professions1
           handleChangeProfessions={handleChangeProfessions}
           value={formState.fields.professions}
         />
-        <Experience
+        <Experience1
           handleChangeExperience={handleChangeExperience}
           value={formState.fields.experience}
         />

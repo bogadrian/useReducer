@@ -9,7 +9,7 @@ type NamesProps = {
   value?: { name: string; surname: string };
 };
 
-export const Names: React.FC<NamesProps> = memo(
+export const Names1: React.FC<NamesProps> = memo(
   ({ handleChangeNames, value }) => {
     return (
       <div className="Component" style={{ backgroundColor: randomColor() }}>
@@ -37,7 +37,7 @@ type ProfessionsProps = {
   handleChangeProfessions?: (profession: string) => void;
   value?: string[];
 };
-export const Professions: React.FC<ProfessionsProps> = memo(
+export const Professions1: React.FC<ProfessionsProps> = memo(
   ({ handleChangeProfessions }) => {
     const ref = useRef<HTMLInputElement>(null);
 
@@ -66,7 +66,7 @@ type ExperienceProps = {
   handleChangeExperience?: (e: ChangeEvent<HTMLInputElement>) => void;
   value?: { firstExperince: string; secondExperience: string };
 };
-export const Experience: React.FC<ExperienceProps> = memo(
+export const Experience1: React.FC<ExperienceProps> = memo(
   ({ handleChangeExperience, value }) => {
     return (
       <div className="Component" style={{ backgroundColor: randomColor() }}>

@@ -1,5 +1,5 @@
 import { useReducer, ReactChild, ChangeEvent } from 'react';
-import { Names, Professions, Experience } from './index';
+import { Names2, Professions2, Experience2 } from './index';
 import { randomColor } from '../utilis';
 import '../App.css';
 
@@ -21,7 +21,7 @@ const initialState = {
   currentStep: 0
 };
 
-type ActionType =
+export type ActionType =
   | { type: 'names'; name: string; value: string }
   | { type: 'professions'; profession: string }
   | { type: 'experience'; name: string; value: string }
@@ -83,30 +83,6 @@ const reducer = (state: InitialState, action: ActionType) => {
 export function App2() {
   const [formState, dispatch] = useReducer(reducer, initialState);
 
-  const handleChangeNames = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    dispatch({ type: 'names', name, value });
-  };
-
-  const handleChangeProfessions = (profession: string) => {
-    dispatch({ type: 'professions', profession });
-  };
-
-  const handleChangeExperience = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    dispatch({ type: 'experience', name, value });
-  };
-
-  const handleNext = () => {
-    dispatch({ type: 'next' });
-  };
-
-  const handlePrev = () => {
-    dispatch({ type: 'previous' });
-  };
-
   return (
     <div className="App" style={{ backgroundColor: randomColor() }}>
       <h3>App Component</h3>
@@ -114,27 +90,17 @@ export function App2() {
         <span className="json-text">{JSON.stringify(formState, null, 2)}</span>
       </div>
       <>
-        <Names value={formState.fields.names} />
-        <Professions value={formState.fields.professions} />
-        <Experience value={formState.fields.experience} />
+        <Names2 value={formState.fields.names} />
+        <Professions2 value={formState.fields.professions} />
+        <Experience2 value={formState.fields.experience} />
       </>
-      <Stepper
-        currentStep={formState.currentStep}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      >
-        <Names
-          handleChangeNames={handleChangeNames}
-          value={formState.fields.names}
-        />
-        <Professions
-          handleChangeProfessions={handleChangeProfessions}
+      <Stepper currentStep={formState.currentStep} dispatch={dispatch}>
+        <Names2 dispatch={dispatch} value={formState.fields.names} />
+        <Professions2
+          dispatch={dispatch}
           value={formState.fields.professions}
         />
-        <Experience
-          handleChangeExperience={handleChangeExperience}
-          value={formState.fields.experience}
-        />
+        <Experience2 dispatch={dispatch} value={formState.fields.experience} />
       </Stepper>
     </div>
   );
@@ -143,16 +109,22 @@ export function App2() {
 type StepperProps = {
   children: ReactChild[];
   currentStep: number;
-  handlePrev: () => void;
-  handleNext: () => void;
+  dispatch: ({ type }: { type: 'next' | 'previous' }) => void;
 };
 
 const Stepper: React.FC<StepperProps> = ({
   children,
   currentStep,
-  handleNext,
-  handlePrev
+  dispatch
 }) => {
+  const handleNext = () => {
+    dispatch({ type: 'next' });
+  };
+
+  const handlePrev = () => {
+    dispatch({ type: 'previous' });
+  };
+
   return (
     <div className="Stepper" style={{ backgroundColor: randomColor() }}>
       <h1>Stepper Component</h1>
