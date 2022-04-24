@@ -1,4 +1,4 @@
-import { memo, ChangeEvent, useRef } from 'react';
+import { memo, useRef } from 'react';
 import { randomColor } from '../utilis';
 
 import '../App';
@@ -64,18 +64,22 @@ type ProfessionsProps = {
 export const Professions2: React.FC<ProfessionsProps> = memo(({ dispatch }) => {
   const ref = useRef<HTMLInputElement>(null);
 
-  const handleRefValue = () => {
-    if (ref && ref.current) {
-      dispatch?.({ type: 'professions', profession: ref?.current?.value });
-      ref.current.value = '';
-    }
-  };
-
   return (
     <div className="Component" style={{ backgroundColor: randomColor() }}>
       <h1>Professions Component</h1>
       <input className="Input" name="professions" ref={ref} />
-      <button className="button" onClick={handleRefValue}>
+      <button
+        className="button"
+        onClick={() => {
+          if (ref && ref.current) {
+            dispatch?.({
+              type: 'professions',
+              profession: ref?.current?.value
+            });
+            ref.current.value = '';
+          }
+        }}
+      >
         Set Professions
       </button>
     </div>
@@ -90,7 +94,7 @@ type ExperienceProps = {
     name,
     value
   }: {
-    type: 'names';
+    type: 'experience';
     name: string;
     value: string;
   }) => void;
@@ -98,11 +102,6 @@ type ExperienceProps = {
 };
 export const Experience2: React.FC<ExperienceProps> = memo(
   ({ dispatch, value }) => {
-    const handleChangeExperience = (e: ChangeEvent<HTMLInputElement>) => {
-      const name = e.target.name;
-      const value = e.target.value;
-      dispatch?.({ type: 'names', name, value });
-    };
     return (
       <div className="Component" style={{ backgroundColor: randomColor() }}>
         <h1>Experience Component</h1>
@@ -110,13 +109,25 @@ export const Experience2: React.FC<ExperienceProps> = memo(
           className="Input"
           name="firstExperince"
           defaultValue={value?.firstExperince}
-          onChange={handleChangeExperience}
+          onChange={e =>
+            dispatch?.({
+              type: 'experience',
+              name: e.target.name,
+              value: e.target.value
+            })
+          }
         />
         <input
           className="Input"
           name="secondExperience"
           defaultValue={value?.secondExperience}
-          onChange={handleChangeExperience}
+          onChange={e =>
+            dispatch?.({
+              type: 'experience',
+              name: e.target.name,
+              value: e.target.value
+            })
+          }
         />
       </div>
     );

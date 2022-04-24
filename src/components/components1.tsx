@@ -1,11 +1,10 @@
 import { memo, ChangeEvent, useRef } from 'react';
 import { randomColor } from '../utilis';
-
 import '../App';
 
 //! Names Componnet
 type NamesProps = {
-  handleChangeNames?: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChangeNames: (e: ChangeEvent<HTMLInputElement>) => void;
   value?: { name: string; surname: string };
 };
 

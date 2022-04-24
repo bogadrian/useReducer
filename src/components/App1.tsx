@@ -1,4 +1,4 @@
-import { useState, ReactChild, ChangeEvent } from 'react';
+import { useState, ReactChild, ChangeEvent, memo } from 'react';
 import { Names1, Professions1, Experience1 } from './index';
 import { randomColor } from '../utilis';
 import '../App.css';
@@ -81,9 +81,18 @@ export function App1() {
         <span className="json-text">{JSON.stringify(formState, null, 2)}</span>
       </div>
       <>
-        <Names1 value={formState.fields.names} />
-        <Professions1 value={formState.fields.professions} />
-        <Experience1 value={formState.fields.experience} />
+        <Names1
+          handleChangeNames={handleChangeNames}
+          value={formState.fields.names}
+        />
+        <Professions1
+          handleChangeProfessions={handleChangeProfessions}
+          value={formState.fields.professions}
+        />
+        <Experience1
+          handleChangeExperience={handleChangeExperience}
+          value={formState.fields.experience}
+        />
       </>
       <Stepper
         currentStep={formState.currentStep}
@@ -114,24 +123,21 @@ type StepperProps = {
   handleNext: () => void;
 };
 
-const Stepper: React.FC<StepperProps> = ({
-  children,
-  currentStep,
-  handleNext,
-  handlePrev
-}) => {
-  return (
-    <div className="Stepper" style={{ backgroundColor: randomColor() }}>
-      <h1>Stepper Component</h1>
-      {children[currentStep]}
-      <div className="buttons">
-        <button className="button" onClick={handlePrev}>
-          Previous
-        </button>
-        <button className="button" onClick={handleNext}>
-          Next
-        </button>
+const Stepper: React.FC<StepperProps> = memo(
+  ({ children, currentStep, handleNext, handlePrev }) => {
+    return (
+      <div className="Stepper" style={{ backgroundColor: randomColor() }}>
+        <h1>Stepper Component</h1>
+        {children[currentStep]}
+        <div className="buttons">
+          <button className="button" onClick={handlePrev}>
+            Previous
+          </button>
+          <button className="button" onClick={handleNext}>
+            Next
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);

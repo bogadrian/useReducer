@@ -1,4 +1,4 @@
-import { useReducer, ReactChild, ChangeEvent } from 'react';
+import { useReducer, ReactChild, memo } from 'react';
 import { Names2, Professions2, Experience2 } from './index';
 import { randomColor } from '../utilis';
 import '../App.css';
@@ -40,7 +40,7 @@ const reducer = (state: InitialState, action: ActionType) => {
             [action.name]: action.value
           }
         },
-        currentState: 0
+        currentStep: 0
       };
     case 'professions':
       return {
@@ -49,7 +49,7 @@ const reducer = (state: InitialState, action: ActionType) => {
           ...state.fields,
           professions: [...state.fields.professions, action.profession]
         },
-        currentState: 1
+        currentStep: 1
       };
     case 'experience':
       return {
@@ -61,7 +61,7 @@ const reducer = (state: InitialState, action: ActionType) => {
             [action.name]: action.value
           }
         },
-        currentState: 2
+        currentStep: 2
       };
     case 'next':
       return {
@@ -90,9 +90,12 @@ export function App2() {
         <span className="json-text">{JSON.stringify(formState, null, 2)}</span>
       </div>
       <>
-        <Names2 value={formState.fields.names} />
-        <Professions2 value={formState.fields.professions} />
-        <Experience2 value={formState.fields.experience} />
+        <Names2 dispatch={dispatch} value={formState.fields.names} />
+        <Professions2
+          dispatch={dispatch}
+          value={formState.fields.professions}
+        />
+        <Experience2 dispatch={dispatch} value={formState.fields.experience} />
       </>
       <Stepper currentStep={formState.currentStep} dispatch={dispatch}>
         <Names2 dispatch={dispatch} value={formState.fields.names} />
@@ -112,31 +115,24 @@ type StepperProps = {
   dispatch: ({ type }: { type: 'next' | 'previous' }) => void;
 };
 
-const Stepper: React.FC<StepperProps> = ({
-  children,
-  currentStep,
-  dispatch
-}) => {
-  const handleNext = () => {
-    dispatch({ type: 'next' });
-  };
-
-  const handlePrev = () => {
-    dispatch({ type: 'previous' });
-  };
-
-  return (
-    <div className="Stepper" style={{ backgroundColor: randomColor() }}>
-      <h1>Stepper Component</h1>
-      {children[currentStep]}
-      <div className="buttons">
-        <button className="button" onClick={handlePrev}>
-          Previous
-        </button>
-        <button className="button" onClick={handleNext}>
-          Next
-        </button>
+const Stepper: React.FC<StepperProps> = memo(
+  ({ children, currentStep, dispatch }) => {
+    return (
+      <div className="Stepper" style={{ backgroundColor: randomColor() }}>
+        <h1>Stepper Component</h1>
+        {children[currentStep]}
+        <div className="buttons">
+          <button
+            className="button"
+            onClick={() => dispatch({ type: 'previous' })}
+          >
+            Previous
+          </button>
+          <button className="button" onClick={() => dispatch({ type: 'next' })}>
+            Next
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
